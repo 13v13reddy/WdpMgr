@@ -47,7 +47,7 @@ docker run --name wdpmgr-server \
   -e WDPMGR_ADMIN_KEY='replace-with-a-long-secret' \
   -e WDPMGR_FIRST_USER='admin' \
   -e WDPMGR_FIRST_PASS='replace-with-a-password' \
-  -v wdpmgr-data:/data \
+  -v wdpmgr-live-data:/data \
   wdpmgr-server:local
 ```
 

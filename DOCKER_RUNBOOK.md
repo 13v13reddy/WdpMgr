@@ -93,7 +93,9 @@ context. They must be built separately and uploaded as the base EXE.
 
 The first-user and admin-key environment variables initialize an empty database. Once
 the database contains a saved master key, changing those variables does not reset the
-existing credentials; change the key from **Settings** instead.
+existing credentials; change the key from **Settings** instead. Until a master key is
+saved in the database, keep `WDPMGR_ADMIN_KEY` the same whenever you recreate the
+container (omitting it falls back to the insecure default `changeme`).
 
 ## 6. Container operations
 
@@ -144,6 +146,17 @@ docker start wdpmgr-server
 ```
 
 The archive contains the database, RSA keys, and uploaded base EXEs. Keep it private.
+
+The backup command above is for Bash/WSL. In PowerShell, use an explicit host path:
+
+```powershell
+docker stop wdpmgr-server
+docker run --rm `
+  -v wdpmgr-live-data:/data:ro `
+  -v "${PWD.Path}:/backup" `
+  alpine tar czf /backup/wdpmgr-data.tgz -C /data .
+docker start wdpmgr-server
+```
 
 ## Troubleshooting
 
