@@ -43,7 +43,7 @@ Run it with a persistent volume for the SQLite database and RSA keys:
 
 ```bash
 docker run --name wdpmgr-server \
-  -p 127.0.0.1:5000:5000 \
+  -p 18080:5000 \
   -e WDPMGR_ADMIN_KEY='replace-with-a-long-secret' \
   -e WDPMGR_FIRST_USER='admin' \
   -e WDPMGR_FIRST_PASS='replace-with-a-password' \
@@ -51,11 +51,11 @@ docker run --name wdpmgr-server \
   wdpmgr-server:local
 ```
 
-Open `http://localhost:5000`. Upload the Windows base EXE through **Settings** before downloading licensed client builds. Keep the `/data` volume backed up: it contains the license database and RSA key pair.
+Open `http://localhost:18080`. Upload the Windows base EXE through **Settings** before downloading licensed client builds. Keep the `/data` volume backed up: it contains the license database and RSA key pair.
 
 The container listens on `0.0.0.0:5000` by default. To change the listen address or port, set `ASPNETCORE_URLS` and publish the matching container port. Do not expose the admin panel publicly with the default `changeme` key.
 
-The example binds the UI to the local machine only. For remote clients, use `-p 5000:5000` instead and restrict that port with the host firewall or private network controls.
+The example publishes the UI on all host interfaces so remote clients can reach it. Restrict port `18080` with the host firewall or private network controls. For a local-only run, use `-p 127.0.0.1:18080:5000` instead.
 
 ---
 
