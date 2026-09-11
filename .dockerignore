@@ -1,0 +1,25 @@
+# The image builds only Server/WdpMgrServer.csproj; keep client and driver
+# source out of the Docker build context as well as out of the final image.
+*
+!Server/
+!Server/**
+
+# Never send generated output or Windows/client binaries from Server/.
+Server/bin/
+Server/bin/**
+Server/obj/
+Server/obj/**
+Server/publish/
+Server/publish/**
+Server/publish_out/
+Server/publish_out/**
+Server/**/*.exe
+Server/**/*.dll
+Server/**/*.sys
+Server/**/*.pdb
+Server/**/*.lib
+Server/**/*.exp
+Server/**/*.ilk
+Server/**/*.lic
+Server/**/*.log
+Server/**/*.db

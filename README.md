@@ -29,6 +29,36 @@ After install → **Admin Panel → Settings → Show Key** to get the RSA publi
 
 ---
 
+## Server — Docker (server only)
+
+The ASP.NET licensing/admin server can run as a Linux container on Docker Desktop, Linux, or a container host. This image does not run the Windows client projects or the kernel driver.
+
+Build from the repository root:
+
+```bash
+docker build -t wdpmgr-server:local .
+```
+
+Run it with a persistent volume for the SQLite database and RSA keys:
+
+```bash
+docker run --name wdpmgr-server \
+  -p 127.0.0.1:5000:5000 \
+  -e WDPMGR_ADMIN_KEY='replace-with-a-long-secret' \
+  -e WDPMGR_FIRST_USER='admin' \
+  -e WDPMGR_FIRST_PASS='replace-with-a-password' \
+  -v wdpmgr-data:/data \
+  wdpmgr-server:local
+```
+
+Open `http://localhost:5000`. Upload the Windows base EXE through **Settings** before downloading licensed client builds. Keep the `/data` volume backed up: it contains the license database and RSA key pair.
+
+The container listens on `0.0.0.0:5000` by default. To change the listen address or port, set `ASPNETCORE_URLS` and publish the matching container port. Do not expose the admin panel publicly with the default `changeme` key.
+
+The example binds the UI to the local machine only. For remote clients, use `-p 5000:5000` instead and restrict that port with the host firewall or private network controls.
+
+---
+
 ## Server — Migrate to a New Machine
 
 > **Critical:** The RSA key pair lives inside `wdpmgr.db`. Copying the DB preserves all issued licenses. Without it, new keys are generated and every `wdp.lic` in the field becomes invalid.

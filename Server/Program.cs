@@ -13,19 +13,22 @@ string dbPath     = Env("WDPMGR_DB_PATH",   "wdpmgr.db");
 int    port       = int.TryParse(Env("PORT","5000"), out var _p) ? _p : 5000;
 string firstUser  = Env("WDPMGR_FIRST_USER", "");
 string firstPass  = Env("WDPMGR_FIRST_PASS", "");
+string listenUrl  = Env("ASPNETCORE_URLS", "");
+if (string.IsNullOrWhiteSpace(listenUrl)) listenUrl = $"http://localhost:{port}";
 
 if (masterKey == "changeme") Console.WriteLine("[WARN] Set WDPMGR_ADMIN_KEY environment variable!");
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseUrls($"http://localhost:{port}");
-builder.Host.UseWindowsService(o => o.ServiceName = "WdpMgrServer");
+builder.WebHost.UseUrls(listenUrl);
+if (OperatingSystem.IsWindows())
+    builder.Host.UseWindowsService(o => o.ServiceName = "WdpMgrServer");
 builder.Services.AddHostedService(sp => new OfflineDetectorService(dbPath));
 var app = builder.Build();
 
 // ── DB init ───────────────────────────────────────────────────────────────────
 DB.Init(dbPath, firstUser, firstPass);
 { using var db0 = DB.Open(dbPath); var saved = DB.GetSetting(db0, "master_key"); if (!string.IsNullOrEmpty(saved)) masterKey = saved; }
-Console.WriteLine($"[INFO] DB: {Path.GetFullPath(dbPath)}  |  http://localhost:{port}");
+Console.WriteLine($"[INFO] DB: {Path.GetFullPath(dbPath)}  |  {listenUrl}");
 
 app.UseDefaultFiles();
 app.UseStaticFiles(new StaticFileOptions {
