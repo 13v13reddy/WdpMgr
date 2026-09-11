@@ -57,6 +57,8 @@ The container listens on `0.0.0.0:5000` by default. To change the listen address
 
 The example publishes the UI on all host interfaces so remote clients can reach it. Restrict port `18080` with the host firewall or private network controls. For a local-only run, use `-p 127.0.0.1:18080:5000` instead.
 
+For the complete Docker procedure, see [DOCKER_RUNBOOK.md](DOCKER_RUNBOOK.md).
+
 ---
 
 ## Server — Migrate to a New Machine
