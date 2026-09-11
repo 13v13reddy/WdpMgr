@@ -1,6 +1,8 @@
-# WdpMgr — Windows Display Policy Manager
+# WdpMgr — macOS-only branch
 
-RSA-licensed tool that prevents `SetWindowDisplayAffinity` (WDA) from hiding windows from screen capture. Consists of a license server, a Windows client (`WdpMgr.exe`), and a Mac client (`MacWdpMgr`).
+> **Branch scope:** `macos-only` contains the macOS implementations and shared licensing server. Windows clients, drivers, test apps, overlays, binaries, and Windows deployment scripts are intentionally excluded.
+
+RSA-licensed macOS tooling that changes window-sharing behavior, plus the shared license server.
 
 ---
 
